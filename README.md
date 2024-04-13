@@ -33,6 +33,10 @@ The SafeResidence app aims to enhance community safety by providing practical so
 
 11) Education and Training Resources: Access safety education materials and emergency preparedness resources to empower proactive risk management.
 
+### Project Proposal Link:
+
+https://docs.google.com/document/d/155YA4CHkuWurXuCtLiybP87Skp7gcxXGxtfcGiidDEo/edit?usp=sharing
+
 
 
 
