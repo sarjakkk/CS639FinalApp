@@ -32,3 +32,5 @@ The SafeResidence app aims to enhance community safety by providing practical so
 10) Live Video :  Access live video feeds from incidents for real-time visual information.
 
 11) Education and Training Resources: Access safety education materials and emergency preparedness resources to empower proactive risk management.
+
+Please delete it
