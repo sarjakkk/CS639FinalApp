@@ -4,8 +4,9 @@ This is the Final Project of Mobile Application Development (CS639) Guided by Pr
 
 ## Application : SafeResidence
 
-Team Members : ## Sarjakkumar Kothiya,
-               ## Jalak Gevariya
+Team Members : 
+## Sarjakkumar Kothiya, 
+## Jalak Gevariya
 
 ### OverView:
 
