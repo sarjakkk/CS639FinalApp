@@ -2,11 +2,15 @@
 
 This is the Final Project of Mobile Application Development (CS639) Guided by Prof. Dr. Christelle Scharff
 
-## Application : SafeResidence
+## Application : SafeResident
 
 Team Members : 
 1) Sarjakkumar Kothiya, 
 2) Jalak Gevariya
+
+## Project Idea Proposal:
+
+https://docs.google.com/document/d/155YA4CHkuWurXuCtLiybP87Skp7gcxXGxtfcGiidDEo/edit
 
 ### OverView:
 
