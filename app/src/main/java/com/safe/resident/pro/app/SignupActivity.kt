@@ -9,17 +9,27 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.safe.resident.pro.app.data.User
 import com.safe.resident.pro.app.databinding.ActivitySignupBinding
+import java.util.UUID
 
 class SignupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignupBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this@SignupActivity, R.layout.activity_signup)
         auth = FirebaseAuth.getInstance()
-
+        database = FirebaseDatabase.getInstance().reference
 
         setupBackPressHandler()
         binding.btnSignup.setOnClickListener {
@@ -28,7 +38,24 @@ class SignupActivity : AppCompatActivity() {
             val confirmPassword = binding.etConfirmPassword.text.toString().trim()
             Log.e("SignUp", "onCreate: SignUp \n Email : $email \n Password: $password \n Re_Pass: $confirmPassword", )
             if (validateInputs(email, password, confirmPassword)) {
-                signUpUser(email, password)
+                // Create user object
+                checkEmailExists(email) { exists ->
+                    if (exists) {
+                        showToast("Account already exists.")
+                    } else {
+                        val user = User(UUID.randomUUID().toString(), email, password)
+
+                        database.child("users").child(user.userid).setValue(user)
+                            .addOnSuccessListener {
+                                showToast("Sign-up successful!")
+                                startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
+                                finish()
+                            }
+                            .addOnFailureListener {
+                                showToast("Signup failed! Please try again.")
+                            }
+                    }
+                }
             }
         }
 
@@ -39,6 +66,18 @@ class SignupActivity : AppCompatActivity() {
 
     }
 
+    private fun checkEmailExists(email: String, callback: (Boolean) -> Unit) {
+        database.child("users").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                callback(dataSnapshot.exists()) // Returns true if any child has the email
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w("DBError", "loadPost:onCancelled", databaseError.toException())
+            }
+        })
+    }
     private fun setupBackPressHandler() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -67,8 +106,8 @@ class SignupActivity : AppCompatActivity() {
             return false
         }
 
-        if (password.length < 8) {
-            showToast("Password must be at least 8 characters long.")
+        if (password.length < 6) {
+            showToast("Password must be at least 6 characters long.")
             return false
         }
 

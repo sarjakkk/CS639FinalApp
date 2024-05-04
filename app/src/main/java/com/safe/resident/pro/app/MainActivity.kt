@@ -7,13 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.safe.resident.pro.app.databinding.ActivityMainBinding
+import com.safe.resident.pro.app.fragments.ReportFragment
 import com.safe.resident.pro.app.fragments.LiveFragment
 import com.safe.resident.pro.app.fragments.TrackFragment
-import com.safe.resident.pro.app.fragments.U911Fragment
-
+import com.safe.resident.pro.app.fragments.AlertFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -23,8 +24,8 @@ class MainActivity : AppCompatActivity() {
     private var trackFragment: Fragment? = null
     private var liveFragment: Fragment? = null
     private var u911Fragment: Fragment? = null
+    private var alertFragment: Fragment? = null
     private var currentFragment: Fragment? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.decorView.systemUiVisibility =
@@ -33,11 +34,15 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.getColor(this, R.color.white) // set status background white
         binding = DataBindingUtil.setContentView(this@MainActivity, R.layout.activity_main)
         binding.bottomNavigationBar.setOnNavigationItemSelectedListener(navListener)
+        drawerLayout = binding.drawerLayout
+
 
         setupFragments()
         setDrawer()
     }
-
+    companion object{
+        lateinit var drawerLayout : DrawerLayout
+    }
     private fun setDrawer() {
         drawerTextViews = ArrayList()
         drawerTextViews.add(binding.drawerMyAccount)
@@ -49,7 +54,6 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
-        binding.ivUser.setOnClickListener { view -> binding.drawerLayout.openDrawer(GravityCompat.START) }
         binding.tvVersion.setText("v" + BuildConfig.VERSION_NAME)
         selectedFragment = TrackFragment()
         supportFragmentManager
@@ -61,10 +65,9 @@ class MainActivity : AppCompatActivity() {
         // Initialize fragments one time
         trackFragment = supportFragmentManager.findFragmentByTag("track") ?: TrackFragment()
         liveFragment = supportFragmentManager.findFragmentByTag("live") ?: LiveFragment()
-        u911Fragment = supportFragmentManager.findFragmentByTag("u911") ?: U911Fragment()
+        u911Fragment = supportFragmentManager.findFragmentByTag("u911") ?: AlertFragment()
+        alertFragment = supportFragmentManager.findFragmentByTag("alert") ?: ReportFragment()
         currentFragment = trackFragment
-
-        // Initially show the TrackFragment
         supportFragmentManager.beginTransaction().add(R.id.fragment_container, trackFragment!!, "track").commit()
     }
     private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -72,6 +75,7 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_track -> trackFragment
             R.id.menu_live -> liveFragment
             R.id.menu_911 -> u911Fragment
+            R.id.menu_alert -> alertFragment
             else -> null
         }
         nextFragment?.let {

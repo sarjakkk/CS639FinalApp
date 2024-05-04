@@ -11,18 +11,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.safe.resident.pro.app.data.User
 import com.safe.resident.pro.app.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginBinding
-
+    private lateinit var database: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this@LoginActivity, R.layout.activity_login)
 
         setupBackPressHandler()
-
+        database = FirebaseDatabase.getInstance().reference
         binding.tvSignUp.setOnClickListener {
             startActivity(Intent(this@LoginActivity, SignupActivity::class.java))
             finish()
@@ -34,32 +40,41 @@ class LoginActivity : AppCompatActivity() {
             val message = "Enter Valid Credentials"
             val duration = Snackbar.LENGTH_SHORT
             Log.e("Login", "onCreate: Login \n Email : $email \n Password: $password")
-            if (validateCredentials(email, password)) {
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(
-                    email,
-                    password
-                )
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            val user = FirebaseAuth.getInstance().currentUser
-
-                            val sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                            sharedPrefs.edit().putBoolean("isLoggedIn", true).apply()
-
-                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                            finish()
-                        } else {
-                            Toast.makeText(
-                                baseContext, "Authentication failed.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+            if (validateInputs(email, password)) {
+                loginUser(email,password)
             }else{
                 val snackbar = Snackbar.make(rootView, message, duration)
                 snackbar.show()
             }
         }
+    }
+    private fun loginUser(email: String, password: String) {
+        database.child("users").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var userFound = false
+                for (snapshot in dataSnapshot.children) {
+                    val user = snapshot.getValue(User::class.java)
+                    if (user != null && user.email == email && user.password == password) {
+                        userFound = true
+                        showToast("Login successful!")
+                        val sharedPrefs = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+                        sharedPrefs.edit().putBoolean("isLoggedIn", true).apply()
+                        sharedPrefs.edit().putString("email", user.userid).apply()
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                        break
+                    }
+                }
+                if (!userFound) {
+                    Toast.makeText(this@LoginActivity, "Invalid credentials", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w("LoginActivity", "loadUser:onCancelled", databaseError.toException())
+                Toast.makeText(this@LoginActivity, "An error occurred", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
     private fun setupBackPressHandler() {
         val callback = object : OnBackPressedCallback(true) {
@@ -70,33 +85,30 @@ class LoginActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this, callback)
     }
-    fun isValidEmail(email: String): Boolean {
-        return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    fun isValidPassword(password: String): Boolean {
-        // Example: Password must be at least 8 characters and include numbers and letters
-        val passwordPattern = "^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$"
-        val passwordMatcher = Regex(passwordPattern)
-
-        return password.isNotEmpty() && passwordMatcher.matches(password)
-    }
-
-    fun validateCredentials(email: String, password: String): Boolean {
-        var valid = true
-
-        if (!isValidEmail(email)) {
-            // Handle error for email
-            println("Invalid email format")
-            valid = false
+    private fun validateInputs(email: String, password: String): Boolean {
+        if (email.isEmpty()) {
+            showToast("Please enter your email.")
+            return false
         }
 
-        if (!isValidPassword(password)) {
-            // Handle error for password
-            println("Password must be at least 8 characters long and include both letters and numbers.")
-            valid = false
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            showToast("Invalid email format.")
+            return false
         }
 
-        return valid
+        if (password.isEmpty()) {
+            showToast("Please enter a password.")
+            return false
+        }
+
+        if (password.length < 8) {
+            showToast("Password must be at least 8 characters long.")
+            return false
+        }
+
+        return true
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
