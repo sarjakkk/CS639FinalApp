@@ -18,11 +18,13 @@ The SafeResidence app aims to enhance community safety by providing practical so
 
 ### Features:
 
-1) Reports: Receive instant notifications about nearby incidents such as fires, accidents, crimes, and emergencies.
+1) Alerts: Receive instant notifications about nearby incidents such as fires, accidents, crimes, and emergencies.
 
-2) Direct Communication with Authorities (911): Improve response times by communicating directly with local law enforcement or emergency services.
+2) Track Safety Map: Visualize recent incidents and their locations on a map to stay informed about potential risks in specific areas.
 
-3) Safety Map: Visualize recent incidents and their locations on a map to stay informed about potential risks in specific areas.
+3) Reports : Citizens can report manually about nearby incidents by pin the location on map.
+
+3) Direct Communication with Authorities (911): Improve response times by communicating directly with local law enforcement or emergency services.
 
 4) Live Video :  Access live video feeds from incidents for real-time visual information.
 

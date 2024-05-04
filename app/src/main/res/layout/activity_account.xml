@@ -50,10 +50,6 @@
             android:padding="15dp">
 
             <ImageView
-<<<<<<< HEAD
-=======
-                android:id="@+id/ivProfileImage"
->>>>>>> 242435742d92f0d87ca8df0d86b172a5a71ffa76
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
