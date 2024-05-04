@@ -30,11 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR //  set status text dark
-        window.statusBarColor =
-            ContextCompat.getColor(this, R.color.white) // set status background white
         binding = DataBindingUtil.setContentView(this@MainActivity, R.layout.activity_main)
         binding.bottomNavigationBar.setOnNavigationItemSelectedListener(navListener)
-        drawerLayout = binding.drawerLayout
 
         setupFragments()
         setDrawer()
