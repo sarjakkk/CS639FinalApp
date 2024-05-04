@@ -46,7 +46,13 @@ class MainActivity : AppCompatActivity() {
         drawerTextViews = ArrayList()
         drawerTextViews.add(binding.drawerMyAccount)
         drawerTextViews.add(binding.drawerContact)
-
+        for (textView in drawerTextViews) {
+            textView.setOnClickListener { view: View? ->
+                binding.drawerLayout.closeDrawer(
+                    GravityCompat.START
+                )
+            }
+        }
         binding.tvVersion.setText("v" + BuildConfig.VERSION_NAME)
         selectedFragment = TrackFragment()
         supportFragmentManager
@@ -66,6 +72,9 @@ class MainActivity : AppCompatActivity() {
     private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val nextFragment = when (item.itemId) {
             R.id.menu_track -> trackFragment
+            R.id.menu_live -> liveFragment
+            R.id.menu_911 -> u911Fragment
+            R.id.menu_alert -> alertFragment
             else -> null
         }
         nextFragment?.let {
@@ -83,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     show(nextFragment)
                 }
+                currentFragment = nextFragment
             }.commit()
         }
     }

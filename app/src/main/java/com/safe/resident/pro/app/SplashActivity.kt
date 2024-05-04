@@ -26,6 +26,17 @@ class SplashActivity : AppCompatActivity() {
 
         binding.tvVersionName.text = "Version: V${BuildConfig.VERSION_NAME}"
 
+        Handler(mainLooper).postDelayed({
+            val destination = if (isLoggedIn) MainActivity::class.java else LoginActivity::class.java
+            val intent = Intent(this, destination)
+            if (isNetworkAvailable()) {
+                startActivity(intent)
+                finish()
+            }else{
+                Toast.makeText(this@SplashActivity, "No internet connection", Toast.LENGTH_LONG).show()
+                finish()
+            }
+        }, 2000)
     }
 
     private fun isNetworkAvailable(): Boolean {
@@ -37,6 +48,11 @@ class SplashActivity : AppCompatActivity() {
             val activeNetwork =
                 connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
 
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                else -> false
+            }
         } else {
             @Suppress("DEPRECATION")
             val activeNetworkInfo = connectivityManager.activeNetworkInfo

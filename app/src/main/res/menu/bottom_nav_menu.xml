@@ -16,16 +16,6 @@
         android:visible="true"
         android:icon="@drawable/ic_911"/>
     <item
-        android:id="@+id/menu_live"
-        android:title="@string/live"
-        android:visible="true"
-        android:icon="@drawable/ic_live"/>
-    <item
-        android:id="@+id/menu_911"
-        android:title="@string/s911"
-        android:visible="true"
-        android:icon="@drawable/ic_911"/>
-    <item
         android:id="@+id/menu_alert"
         android:title="@string/alert"
         android:visible="true"
