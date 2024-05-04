@@ -37,7 +37,26 @@ class SignupActivity : AppCompatActivity() {
             val password = binding.etPassword.text.toString().trim()
             val confirmPassword = binding.etConfirmPassword.text.toString().trim()
             Log.e("SignUp", "onCreate: SignUp \n Email : $email \n Password: $password \n Re_Pass: $confirmPassword", )
+            if (validateInputs(email, password, confirmPassword)) {
+                // Create user object
+                checkEmailExists(email) { exists ->
+                    if (exists) {
+                        showToast("Account already exists.")
+                    } else {
+                        val user = User(UUID.randomUUID().toString(), email, password)
 
+                        database.child("users").child(user.userid).setValue(user)
+                            .addOnSuccessListener {
+                                showToast("Sign-up successful!")
+                                startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
+                                finish()
+                            }
+                            .addOnFailureListener {
+                                showToast("Signup failed! Please try again.")
+                            }
+                    }
+                }
+            }
         }
 
         binding.tvSignIn.setOnClickListener {
