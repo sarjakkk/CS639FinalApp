@@ -52,19 +52,7 @@ class AccountActivity : AppCompatActivity() {
         loadUserData()
         loadIncidents()
 
-        binding.ivProfileImage.setOnClickListener {
-            showImagePickerOptions()
-        }
 
-        // Check scoped storage permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
-                // Permission granted
-
-            } else {
-                requestScopedStoragePermission()
-            }
-        }
         cameraActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
@@ -85,8 +73,6 @@ class AccountActivity : AppCompatActivity() {
             .setPositiveButton("OK") { dialog, which ->
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                 val uri = Uri.fromParts("package", packageName, null)
-                intent.data = uri
-                startActivity(intent)
             }
             .setNegativeButton("Cancel") { dialog, which ->
                 dialog.dismiss()
@@ -108,8 +94,6 @@ class AccountActivity : AppCompatActivity() {
                 this,
                 arrayOf(
                     android.Manifest.permission.CAMERA,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ),
                 PERMISSION_REQUEST_CODE
             )

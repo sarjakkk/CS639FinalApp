@@ -26,17 +26,6 @@ class SplashActivity : AppCompatActivity() {
 
         binding.tvVersionName.text = "Version: V${BuildConfig.VERSION_NAME}"
 
-        Handler(mainLooper).postDelayed({
-            val destination = if (isLoggedIn) MainActivity::class.java else LoginActivity::class.java
-            val intent = Intent(this, destination)
-            if (isNetworkAvailable()) {
-                startActivity(intent)
-                finish()
-            }else{
-                Toast.makeText(this@SplashActivity, "No internet connection", Toast.LENGTH_LONG).show()
-                finish()
-            }
-        }, 2000)
     }
 
     private fun isNetworkAvailable(): Boolean {

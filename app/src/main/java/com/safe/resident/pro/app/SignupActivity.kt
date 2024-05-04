@@ -45,15 +45,6 @@ class SignupActivity : AppCompatActivity() {
                     } else {
                         val user = User(UUID.randomUUID().toString(), email, password)
 
-                        database.child("users").child(user.userid).setValue(user)
-                            .addOnSuccessListener {
-                                showToast("Sign-up successful!")
-                                startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
-                                finish()
-                            }
-                            .addOnFailureListener {
-                                showToast("Signup failed! Please try again.")
-                            }
                     }
                 }
             }
