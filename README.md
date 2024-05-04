@@ -30,6 +30,7 @@ The SafeResidence app aims to enhance community safety by providing practical so
 
 5) Localized Safety Recommendations: Receive personalized safety advice based on your location and incident types.
 
+### Video Link:
 
-
+https://youtu.be/Q5G1Bq7-V58
 
