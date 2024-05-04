@@ -50,11 +50,6 @@ class SignupActivity : AppCompatActivity() {
             }
         }
 
-        binding.tvSignIn.setOnClickListener {
-            startActivity(Intent(this@SignupActivity, LoginActivity::class.java))
-            finish()
-        }
-
     }
 
     private fun checkEmailExists(email: String, callback: (Boolean) -> Unit) {

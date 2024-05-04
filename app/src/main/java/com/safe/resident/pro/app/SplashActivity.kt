@@ -37,11 +37,6 @@ class SplashActivity : AppCompatActivity() {
             val activeNetwork =
                 connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
 
-            return when {
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                else -> false
-            }
         } else {
             @Suppress("DEPRECATION")
             val activeNetworkInfo = connectivityManager.activeNetworkInfo
