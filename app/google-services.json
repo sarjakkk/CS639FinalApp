@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "179817415024",
+    "firebase_url": "https://safe-resident-default-rtdb.firebaseio.com",
     "project_id": "safe-resident",
     "storage_bucket": "safe-resident.appspot.com"
   },
