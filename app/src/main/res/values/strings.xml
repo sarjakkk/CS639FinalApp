@@ -4,6 +4,6 @@
     <string name="map">Map</string>
     <string name="track">Track</string>
     <string name="live">Live</string>
-    <string name="s911">Alert</string>
-    <string name="alert">Report</string>
+    <string name="s911">911</string>
+    <string name="alert">Alert</string>
 </resources>

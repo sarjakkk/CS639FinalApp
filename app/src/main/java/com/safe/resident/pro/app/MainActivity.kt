@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationBar.setOnNavigationItemSelectedListener(navListener)
         drawerLayout = binding.drawerLayout
 
-
         setupFragments()
         setDrawer()
     }

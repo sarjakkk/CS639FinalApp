@@ -15,7 +15,6 @@
         android:title="@string/s911"
         android:visible="true"
         android:icon="@drawable/ic_911"/>
-
     <item
         android:id="@+id/menu_alert"
         android:title="@string/alert"
