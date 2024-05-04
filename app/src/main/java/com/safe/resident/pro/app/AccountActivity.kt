@@ -33,7 +33,6 @@ import java.io.ByteArrayOutputStream
 class AccountActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAccountBinding
-    private lateinit var database: DatabaseReference
     private lateinit var userId: String
     private var PERMISSION_REQUEST_CODE: Int = 1114
     private var CAMERA: Int = 1115
@@ -53,14 +52,6 @@ class AccountActivity : AppCompatActivity() {
         loadIncidents()
 
                 // Check scoped storage permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
-                // Permission granted
-
-            } else {
-                requestScopedStoragePermission()
-            }
-        }
         cameraActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
@@ -81,8 +72,6 @@ class AccountActivity : AppCompatActivity() {
             .setPositiveButton("OK") { dialog, which ->
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                 val uri = Uri.fromParts("package", packageName, null)
-                intent.data = uri
-                startActivity(intent)
             }
             .setNegativeButton("Cancel") { dialog, which ->
                 dialog.dismiss()
